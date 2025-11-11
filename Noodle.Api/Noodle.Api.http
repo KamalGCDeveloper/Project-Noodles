@@ -1,5 +1,0 @@
-@Noodle.Api_HostAddress = http://localhost:5130
-
-Accept: application/json
-
-###
