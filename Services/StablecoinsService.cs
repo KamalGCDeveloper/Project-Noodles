@@ -61,7 +61,7 @@ namespace Noodle.Api.Services
             return new ActiveUsersStablecoin
             {
                 Value = total,
-                Change = new ActiveUsersChange
+                Change = new ActiveUsersStablecoinChange
                 {
                     Absolute = last7days,
                     Percentage = percent,

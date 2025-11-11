@@ -1,6 +1,6 @@
 namespace Noodle.Api.Models
 {
-    public class ActiveUsersChange
+    public class ActiveUsersStablecoinChange
     {
         public double Absolute { get; set; }
         public double Percentage { get; set; }
@@ -10,6 +10,6 @@ namespace Noodle.Api.Models
     public class ActiveUsersStablecoin
     {
         public double Value { get; set; }
-        public ActiveUsersChange Change { get; set; } = new();
+        public ActiveUsersStablecoinChange Change { get; set; } = new();
     }
 }

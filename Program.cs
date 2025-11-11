@@ -24,6 +24,8 @@ builder.Services.AddControllers();
 // ===== Register Repositories & Services =====
 builder.Services.AddScoped<IStablecoinsRepository, StablecoinsRepository>();
 builder.Services.AddScoped<IStablecoinsService, StablecoinsService>();
+builder.Services.AddScoped<IStocksRepository, StocksRepository>();
+builder.Services.AddScoped<IStocksService, StocksService>();
 
 // 4️⃣ Swagger / OpenAPI
 builder.Services.AddEndpointsApiExplorer();
