@@ -9,6 +9,7 @@
       "Noodle.Api/1.0.0": {
         "dependencies": {
           "Microsoft.AspNetCore.OpenApi": "8.0.10",
+          "MongoDB.Bson": "3.5.0",
           "MongoDB.Driver": "3.5.0",
           "Swashbuckle.AspNetCore": "6.6.2"
         },
