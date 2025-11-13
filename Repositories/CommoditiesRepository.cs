@@ -63,6 +63,7 @@ namespace Noodle.Api.Repositories
                         GrowthRate = growthRate,
                         Trend = dict.GetValueOrDefault("trend")?.ToString(),
                         Symbol = dict.GetValueOrDefault("symbol")?.ToString(),
+                        NameSlug = dict.GetValueOrDefault("name_slug")?.ToString(),
                         Exchange = dict.GetValueOrDefault("exchange")?.ToString(),
                         MediumLogoUrl = dict.GetValueOrDefault("medium_logo_url")?.ToString()
                     });

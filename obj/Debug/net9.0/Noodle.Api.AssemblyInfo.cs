@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Noodle.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cfa35b47b7c026607de17d22f63f63eb44d563cf")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d6f0304f9ff43328bd3ebe17b0faf98a2f4e81c8")]
 [assembly: System.Reflection.AssemblyProductAttribute("Noodle.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Noodle.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

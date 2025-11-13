@@ -7,21 +7,44 @@ using Noodle.Api.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1️⃣ Thêm cấu hình DatabaseSettings từ appsettings.json
+// 1️⃣ Load configurations đầy đủ (json + env variables)
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
+    .AddEnvironmentVariables();
+
+// 2️⃣ Bind DatabaseSettings (Mongo)
 builder.Services.Configure<DatabaseSettings>(
     builder.Configuration.GetSection("DatabaseSettings"));
 
-// 2️⃣ Đăng ký MongoClient để dùng qua Dependency Injection
 builder.Services.AddSingleton<IMongoClient>(s =>
 {
     var settings = s.GetRequiredService<IOptions<DatabaseSettings>>().Value;
     return new MongoClient(settings.ConnectionString);
 });
 
-// 3️⃣ Thêm Controller (sẽ dùng nếu bạn thêm file Controllers/*.cs)
+// 3️⃣ CORS đa môi trường
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowNextJs", policy =>
+    {
+        var allowedOrigins = builder.Configuration
+            .GetSection("Cors:AllowedOrigins")
+            .Get<string[]>() ?? new string[] { };
+
+        policy
+            .WithOrigins(allowedOrigins)
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
+// Controllers
 builder.Services.AddControllers();
 
-// ===== Register Repositories & Services =====
+// Repositories + Services
 builder.Services.AddScoped<IStablecoinsRepository, StablecoinsRepository>();
 builder.Services.AddScoped<IStablecoinsService, StablecoinsService>();
 builder.Services.AddScoped<IStocksRepository, StocksRepository>();
@@ -29,25 +52,28 @@ builder.Services.AddScoped<IStocksService, StocksService>();
 builder.Services.AddScoped<ICommoditiesService, CommoditiesService>();
 builder.Services.AddScoped<ICommoditiesRepository, CommoditiesRepository>();
 
-// 4️⃣ Swagger / OpenAPI
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Background job
 BestYieldHelper.StartAutoRefresh();
 
-// 5️⃣ Swagger cho môi trường dev
+// Enable CORS
+app.UseCors("AllowNextJs");
+
+// Swagger only for Dev
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// 6️⃣ Middleware cơ bản
+// Basic middleware
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
-// ✅ Chạy ứng dụng
 app.Run();
