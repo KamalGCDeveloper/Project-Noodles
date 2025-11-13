@@ -83,3 +83,6 @@
 /Users/minhhuy/Downloads/project/noodle-api-dotnet/obj/Debug/net9.0/Noodle.Api.pdb
 /Users/minhhuy/Downloads/project/noodle-api-dotnet/obj/Debug/net9.0/Noodle.Api.genruntimeconfig.cache
 /Users/minhhuy/Downloads/project/noodle-api-dotnet/obj/Debug/net9.0/ref/Noodle.Api.dll
+/Users/minhhuy/Downloads/project/noodle-api-dotnet/bin/Debug/net9.0/Microsoft.IO.RecyclableMemoryStream.dll
+/Users/minhhuy/Downloads/project/noodle-api-dotnet/bin/Debug/net9.0/System.Reactive.dll
+/Users/minhhuy/Downloads/project/noodle-api-dotnet/bin/Debug/net9.0/Websocket.Client.dll

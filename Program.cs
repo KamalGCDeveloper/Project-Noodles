@@ -51,6 +51,8 @@ builder.Services.AddScoped<IStocksRepository, StocksRepository>();
 builder.Services.AddScoped<IStocksService, StocksService>();
 builder.Services.AddScoped<ICommoditiesService, CommoditiesService>();
 builder.Services.AddScoped<ICommoditiesRepository, CommoditiesRepository>();
+builder.Services.AddScoped<IPriceHistoryService, PriceHistoryService>();
+builder.Services.AddScoped<IPriceHistoryRepository, PriceHistoryRepository>();
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();

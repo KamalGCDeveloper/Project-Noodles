@@ -60,6 +60,10 @@
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.6.2, )"
+            },
+            "Websocket.Client": {
+              "target": "Package",
+              "version": "[5.3.0, )"
             }
           },
           "imports": [
