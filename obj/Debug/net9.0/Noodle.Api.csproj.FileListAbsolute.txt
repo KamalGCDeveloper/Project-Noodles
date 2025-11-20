@@ -66,7 +66,6 @@
 /Users/minhhuy/Downloads/project/noodle-api-dotnet/obj/Debug/net9.0/Noodle.Api.csproj.CoreCompileInputs.cache
 /Users/minhhuy/Downloads/project/noodle-api-dotnet/obj/Debug/net9.0/Noodle.Api.MvcApplicationPartsAssemblyInfo.cs
 /Users/minhhuy/Downloads/project/noodle-api-dotnet/obj/Debug/net9.0/Noodle.Api.MvcApplicationPartsAssemblyInfo.cache
-/Users/minhhuy/Downloads/project/noodle-api-dotnet/obj/Debug/net9.0/Noodle.Api.sourcelink.json
 /Users/minhhuy/Downloads/project/noodle-api-dotnet/obj/Debug/net9.0/scopedcss/bundle/Noodle.Api.styles.css
 /Users/minhhuy/Downloads/project/noodle-api-dotnet/obj/Debug/net9.0/staticwebassets.build.json
 /Users/minhhuy/Downloads/project/noodle-api-dotnet/obj/Debug/net9.0/staticwebassets.development.json
