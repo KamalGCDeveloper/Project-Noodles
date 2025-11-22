@@ -1,0 +1,20 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "DatabaseSettings": {
+    "ConnectionString": "mongodb://username:password@host:port/?authSource=authDatabase",
+    "DatabaseName": "YourDatabaseName"
+  },
+  "Cors": {
+    "AllowedOrigins": [
+      "http://localhost:3000",
+      "http://localhost:3001",
+      "https://your-frontend-domain.com"
+    ]
+  }
+}
+

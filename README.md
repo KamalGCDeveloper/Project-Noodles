@@ -1,92 +1,272 @@
-# Noodle Api
+# Noodle API
 
+A .NET 9.0 ASP.NET Core Web API providing financial data endpoints for stablecoins, stocks, commodities, and price history with MongoDB storage.
 
+## Quick Start
 
-## Getting started
+```bash
+# Clone the repository
+git clone https://git.mvp.studio/production-modules/noodle-api.git
+cd noodle-api
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+# Run automated setup (installs .NET 9.0 if needed)
+./setup.sh              # macOS/Linux
+.\setup.ps1             # Windows (as Administrator)
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+# If .NET is not in PATH after setup, run:
+export PATH="$PATH:$HOME/.dotnet"        # macOS/Linux
+export DOTNET_ROOT="$HOME/.dotnet"
 
-## Add your files
+# Or restart your terminal
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+# Start the API
+dotnet run
 
+# Access Swagger UI
+# http://localhost:5130/swagger
 ```
-cd existing_repo
-git remote add origin https://git.mvp.studio/production-modules/noodle-api.git
-git branch -M main
-git push -uf origin main
-```
 
-## Integrate with your tools
+## Table of Contents
 
-- [ ] [Set up project integrations](https://git.mvp.studio/production-modules/noodle-api/-/settings/integrations)
+- [Features](#features)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Running the Application](#running-the-application)
+- [API Endpoints](#api-endpoints)
+- [Docker Deployment](#docker-deployment)
+- [Troubleshooting](#troubleshooting)
 
-## Collaborate with your team
+## Features
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+- **Financial Data APIs**: Stablecoins, stocks, commodities analytics
+- **MongoDB Integration**: Robust data storage and queries
+- **Swagger Documentation**: Interactive API testing and documentation
+- **CORS Support**: Pre-configured for frontend integration
+- **Background Jobs**: Automated data refresh
 
 ## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+### Automated Setup (Recommended)
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+The setup script automatically installs .NET 9.0 SDK if needed:
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+**macOS/Linux:**
+
+```bash
+./setup.sh
+```
+
+**Windows PowerShell (run as Administrator):**
+
+```powershell
+.\setup.ps1
+```
+
+**What it does:**
+
+- Detects your OS and architecture
+- Downloads and installs .NET 9.0 SDK if not present
+- Restores NuGet packages
+- Builds the project
+
+### Important: PATH Setup
+
+After installation, if `dotnet` command is not found:
+
+**macOS/Linux:**
+
+```bash
+# Add to current session
+export PATH="$PATH:$HOME/.dotnet"
+export DOTNET_ROOT="$HOME/.dotnet"
+
+# Or add to your shell profile (~/.zshrc or ~/.bashrc)
+echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.zshrc
+echo 'export PATH=$PATH:$DOTNET_ROOT' >> ~/.zshrc
+source ~/.zshrc
+```
+
+**Windows:**
+
+- Restart your terminal or
+- Restart your computer
+
+**Verify installation:**
+
+```bash
+dotnet --version  # Should show 9.0.101 or higher
+```
+
+### Manual Installation
+
+If the automated setup fails:
+
+1. **Install .NET 9.0 SDK manually:**
+
+   - Download from: https://dotnet.microsoft.com/download/dotnet/9.0
+   - Or use Homebrew (macOS): `brew install --cask dotnet-sdk`
+
+2. **Build the project:**
+   ```bash
+   dotnet restore
+   dotnet build
+   ```
+
+## Configuration
+
+### Database Connection
+
+Edit `appsettings.Development.json`:
+
+```json
+{
+  "DatabaseSettings": {
+    "ConnectionString": "mongodb://username:password@host:port/?authSource=database",
+    "DatabaseName": "BitCountry-Warehouse"
+  },
+  "Cors": {
+    "AllowedOrigins": ["http://localhost:3000"]
+  }
+}
+```
+
+### Environment Variables (Alternative)
+
+```bash
+export DatabaseSettings__ConnectionString="mongodb://..."
+export DatabaseSettings__DatabaseName="YourDatabaseName"
+```
+
+## Running the Application
+
+```bash
+# Development mode (with Swagger UI)
+dotnet run
+
+# With hot reload
+dotnet watch run
+
+# Production mode
+dotnet run --environment Production
+```
+
+**Access the API:**
+
+- Swagger UI: http://localhost:5130/swagger
+- API Base: http://localhost:5130/noodle
+
+## API Endpoints
+
+All endpoints are prefixed with `/noodle`. View complete documentation at: http://localhost:5130/swagger
+
+### Key Endpoints
+
+**Stablecoins:**
+
+- `GET /noodle/stablecoins` - List with search & pagination
+- `GET /noodle/top-growth-stablecoins` - Top performers
+- `GET /noodle/most-talked-about-stablecoins` - Most discussed
+
+**Stocks:**
+
+- `GET /noodle/stocks` - List with search & pagination
+- `GET /noodle/top-growth-stocks` - Top performers
+- `GET /noodle/most-talked-about-stocks` - Most discussed
+
+**Commodities:**
+
+- `GET /noodle/commodities` - List with filters
+- `GET /noodle/top-growth-commodities` - Top performers
+- `GET /noodle/most-talked-about-commodities` - Most discussed
+
+**Example:**
+
+```bash
+curl http://localhost:5130/noodle/top-growth-stablecoins
+```
+
+## Docker Deployment
+
+```bash
+# Build image
+docker build -t noodle-api .
+
+# Run container
+docker run -d -p 5130:5130 \
+  -e DatabaseSettings__ConnectionString="mongodb://..." \
+  -e DatabaseSettings__DatabaseName="YourDatabase" \
+  noodle-api
+
+# Or use Docker Compose
+docker-compose up -d
+```
+
+## Troubleshooting
+
+### .NET Command Not Found
+
+If `dotnet` command is not found after setup:
+
+```bash
+# macOS/Linux - Add to PATH temporarily
+export PATH="$PATH:$HOME/.dotnet"
+export DOTNET_ROOT="$HOME/.dotnet"
+
+# Or permanently (add to ~/.zshrc or ~/.bashrc)
+echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.zshrc
+echo 'export PATH=$PATH:$DOTNET_ROOT' >> ~/.zshrc
+source ~/.zshrc
+
+# Windows - Restart your terminal or computer
+```
+
+Verify with: `dotnet --version` (should show 9.0.101+)
+
+### MongoDB Connection Failed
+
+- Check connection string in `appsettings.Development.json`
+- Verify MongoDB is accessible: `telnet your-mongo-host 27017`
+- Check credentials and authSource parameter
+
+### Port 5130 Already in Use
+
+```bash
+# macOS/Linux
+lsof -ti:5130 | xargs kill -9
+
+# Windows
+netstat -ano | findstr :5130
+taskkill /PID <PID> /F
+
+# Or change port in Properties/launchSettings.json
+```
+
+### Build Errors
+
+```bash
+dotnet clean
+dotnet restore --force
+dotnet build
+```
+
+## Project Structure
+
+```
+Controllers/    # API endpoints
+Services/       # Business logic
+Repositories/   # Data access
+Models/         # Data models
+Program.cs      # Application entry point
+```
 
 ## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+1. Fork the repository
+2. Create feature branch: `git checkout -b feature/name`
+3. Commit changes: `git commit -m 'Add feature'`
+4. Push: `git push origin feature/name`
+5. Open a Merge Request
 
 ## License
-For open source projects, say how it is licensed.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+[Specify your license here]
