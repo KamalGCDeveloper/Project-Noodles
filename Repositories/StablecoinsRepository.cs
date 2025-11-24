@@ -16,7 +16,7 @@ namespace Noodle.Api.Repositories
 		Task<List<MostTalkedStablecoin>> FindTopStablecoinsByMentionsAsync();
 		Task<(int total, int newCount7d, double growth7dPercent)> GetStablecoinCountAndGrowthAsync();
 		Task<(double total, double last7days, double percent)> CountAndRecentUsersStablecoinsAsync();
-		Task<(List<StablecoinItem> Rows, int Total)> FindStablecoinsAsync(string? q, int skip, int limit);
+		Task<(List<StablecoinItem> Rows, int Total)> FindStablecoinsAsync(string? q, int skip, int limit, string? sortBy = null, string? sortDir = null);
 	}
 
 	public class StablecoinsRepository : IStablecoinsRepository
@@ -372,7 +372,7 @@ namespace Noodle.Api.Repositories
 			return (totalActiveUsers7d, increasedUsers7d, growth7dPercent);
 		}
 
-		public async Task<(List<StablecoinItem> Rows, int Total)> FindStablecoinsAsync(string? q, int skip, int limit)
+		public async Task<(List<StablecoinItem> Rows, int Total)> FindStablecoinsAsync(string? q, int skip, int limit, string? sortBy = null, string? sortDir = null)
 		{
 			var excludedSymbols = StablecoinConstants.ExcludedSymbols;
 			var forceInclude = StablecoinConstants.ForceInclude;
@@ -430,12 +430,50 @@ namespace Noodle.Api.Repositories
 					.Include("valuation.crypto_total_rank")
 					.Include("crypto_total_rank");
 
+			// ---- SORTING LOGIC ----
+			var isAsc = string.Equals(sortDir, "asc", StringComparison.OrdinalIgnoreCase);
+			SortDefinition<dynamic> sortDefinition;
+
+			switch (sortBy)
+			{
+				case "market_cap":
+					sortDefinition = isAsc
+						? Builders<dynamic>.Sort.Ascending("valuation.market_cap_calc").Ascending("symbol")
+						: Builders<dynamic>.Sort.Descending("valuation.market_cap_calc").Ascending("symbol");
+					break;
+
+				case "price":
+					sortDefinition = isAsc
+						? Builders<dynamic>.Sort.Ascending("market.close").Ascending("symbol")
+						: Builders<dynamic>.Sort.Descending("market.close").Ascending("symbol");
+					break;
+
+				case "volume":
+					sortDefinition = isAsc
+						? Builders<dynamic>.Sort.Ascending("market.24h_vol_cmc").Ascending("symbol")
+						: Builders<dynamic>.Sort.Descending("market.24h_vol_cmc").Ascending("symbol");
+					break;
+
+				case "rank":
+					sortDefinition = isAsc
+						? Builders<dynamic>.Sort.Ascending("valuation.crypto_total_rank")
+						: Builders<dynamic>.Sort.Descending("valuation.crypto_total_rank");
+					break;
+
+				default:
+					// DEFAULT SORT
+					sortDefinition = Builders<dynamic>.Sort
+						.Ascending("valuation.crypto_total_rank")
+						.Ascending("symbol");
+					break;
+			}
+
 			// ---- Query song song ----
 			var totalTask = overviewCol.CountDocumentsAsync(baseFilter);
 			var overviewTask = overviewCol
 					.Find(baseFilter)
 					.Project<dynamic>(projectionOverview)
-					.Sort(Builders<dynamic>.Sort.Ascending("valuation.crypto_total_rank").Ascending("symbol"))
+					.Sort(sortDefinition)
 					.Skip(skip)
 					.Limit(limit)
 					.ToListAsync();

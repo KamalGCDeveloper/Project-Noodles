@@ -10,7 +10,7 @@ namespace Noodle.Api.Services
         Task<List<MostTalkedStablecoin>> GetMostTalkedStablecoinsAsync();
         Task<TrackedStablecoin> GetNumberTrackedStablecoinsAsync();
         Task<ActiveUsersStablecoin> GetActiveUsersStablecoinsAsync();
-        Task<StablecoinListResponse> GetStablecoinsAsync(string? q, int page, int limit);
+        Task<StablecoinListResponse> GetStablecoinsAsync(string? q, int page, int limit, string? sortBy = null, string? sortDir = null);
     }
 
     public class StablecoinsService : IStablecoinsService
@@ -70,10 +70,10 @@ namespace Noodle.Api.Services
             };
         }
 
-        public async Task<StablecoinListResponse> GetStablecoinsAsync(string? q, int page, int limit)
+        public async Task<StablecoinListResponse> GetStablecoinsAsync(string? q, int page, int limit, string? sortBy = null, string? sortDir = null)
         {
             int skip = (page - 1) * limit;
-            var (rows, total) = await _repository.FindStablecoinsAsync(q, skip, limit);
+            var (rows, total) = await _repository.FindStablecoinsAsync(q, skip, limit, sortBy, sortDir);
 
             return new StablecoinListResponse
             {

@@ -44,9 +44,9 @@ namespace Noodle.Api.Controllers
         }
 
         [HttpGet("stablecoins")]
-        public async Task<ActionResult<StablecoinListResponse>> GetStablecoins([FromQuery] string? q, [FromQuery] int page = 1, [FromQuery] int limit = 20)
+        public async Task<ActionResult<StablecoinListResponse>> GetStablecoins([FromQuery] string? q, [FromQuery] int page = 1, [FromQuery] int limit = 20, [FromQuery] string? sortBy = null, [FromQuery] string? sortDir = null)
         {
-            var data = await _service.GetStablecoinsAsync(q, page, limit);
+            var data = await _service.GetStablecoinsAsync(q, page, limit, sortBy, sortDir);
             return Ok(data);
         }
     }
