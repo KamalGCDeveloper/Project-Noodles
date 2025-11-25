@@ -53,7 +53,8 @@ builder.Services.AddScoped<ICommoditiesService, CommoditiesService>();
 builder.Services.AddScoped<ICommoditiesRepository, CommoditiesRepository>();
 builder.Services.AddScoped<IPriceHistoryService, PriceHistoryService>();
 builder.Services.AddScoped<IPriceHistoryRepository, PriceHistoryRepository>();
-
+builder.Services.AddScoped<IComparisonService, ComparisonService>();
+builder.Services.AddScoped<IComparisonRepository, ComparisonRepository>();
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
