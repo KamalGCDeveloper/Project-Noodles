@@ -10,6 +10,7 @@ namespace Noodle.Api.Services
         Task<List<MostTalkedStablecoin>> GetMostTalkedStablecoinsAsync();
         Task<TrackedStablecoin> GetNumberTrackedStablecoinsAsync();
         Task<ActiveUsersStablecoin> GetActiveUsersStablecoinsAsync();
+        Task<long> GetTotalCountAsync();
         Task<StablecoinListResponse> GetStablecoinsAsync(string? q, int page, int limit, string? sortBy = null, string? sortDir = null);
     }
 
@@ -82,6 +83,12 @@ namespace Noodle.Api.Services
                 Limit = limit,
                 Total = total
             };
+        }
+
+        public async Task<long> GetTotalCountAsync()
+        {
+            var stablecoins = await _repository.GetTotalCountAsync();
+            return stablecoins;
         }
     }
 }

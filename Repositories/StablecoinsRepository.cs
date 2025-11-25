@@ -16,6 +16,7 @@ namespace Noodle.Api.Repositories
 		Task<List<MostTalkedStablecoin>> FindTopStablecoinsByMentionsAsync();
 		Task<(int total, int newCount7d, double growth7dPercent)> GetStablecoinCountAndGrowthAsync();
 		Task<(double total, double last7days, double percent)> CountAndRecentUsersStablecoinsAsync();
+		Task<long> GetTotalCountAsync();
 		Task<(List<StablecoinItem> Rows, int Total)> FindStablecoinsAsync(string? q, int skip, int limit, string? sortBy = null, string? sortDir = null);
 	}
 
@@ -597,6 +598,39 @@ namespace Noodle.Api.Repositories
 			return (rows, total);
 		}
 
+		public async Task<long> GetTotalCountAsync()
+		{
+			var excludedSymbols = StablecoinConstants.ExcludedSymbols;
+			var forceInclude = StablecoinConstants.ForceInclude;
+
+			// ---- Các điều kiện Stablecoin (giống FindStablecoinsAsync) ----
+
+			var orConds = new List<FilterDefinition<dynamic>>()
+	{
+        // Trong categories có chữ "Stablecoins"
+        Builders<dynamic>.Filter.AnyEq("info.crypto_common_categories_tr", "Stablecoins")
+	};
+
+			// Thêm danh sách force include
+			foreach (var f in forceInclude)
+			{
+				var andCond = Builders<dynamic>.Filter.And(
+					Builders<dynamic>.Filter.Eq("info.base_currency", f.base_currency),
+					Builders<dynamic>.Filter.Eq("info.base_currency_desc", f.base_currency_desc)
+				);
+
+				orConds.Add(andCond);
+			}
+
+			// Base filter: phải thuộc Stablecoins & không nằm trong excluded symbols
+			var baseFilter = Builders<dynamic>.Filter.And(
+				Builders<dynamic>.Filter.Or(orConds),
+				Builders<dynamic>.Filter.Nin("symbol", excludedSymbols)
+			);
+
+			// ---- Count ----
+			return await _collection.CountDocumentsAsync(baseFilter);
+		}
 		// ========== Helper ToDouble ==========
 		private static double ToDouble(object? value)
 		{

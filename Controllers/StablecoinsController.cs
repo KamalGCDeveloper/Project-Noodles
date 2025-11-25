@@ -49,5 +49,12 @@ namespace Noodle.Api.Controllers
             var data = await _service.GetStablecoinsAsync(q, page, limit, sortBy, sortDir);
             return Ok(data);
         }
+
+        [HttpGet("stablecoins-count")]
+        public async Task<IActionResult> GetTotalCountAsync()
+        {
+            var data = await _service.GetTotalCountAsync();
+            return Ok(new { total = data });
+        }
     }
 }
