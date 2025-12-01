@@ -44,7 +44,7 @@ namespace Noodle.Api.Models
     public class ComparisonSummary
     {
         public string? HighestMarketCap { get; set; }
-        public string? LowestMarketCap { get; set; }
+        public string? HighestVolume { get; set; }
         public string? FastestGrowth { get; set; }
 
         public Dictionary<string, double>? PercentageDifferences { get; set; }

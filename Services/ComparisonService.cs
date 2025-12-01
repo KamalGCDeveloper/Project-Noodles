@@ -57,8 +57,8 @@ namespace Noodle.Api.Services
                 .OrderByDescending(a => a.Metrics.MarketCap ?? 0)
                 .First().Id;
 
-            summary.LowestMarketCap = assets
-                .OrderBy(a => a.Metrics.MarketCap ?? 0)
+            summary.HighestVolume = assets
+                 .OrderByDescending(a => a.Metrics.Volume24h ?? 0)
                 .First().Id;
 
             summary.FastestGrowth = assets
