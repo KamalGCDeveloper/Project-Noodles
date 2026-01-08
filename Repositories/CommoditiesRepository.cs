@@ -23,66 +23,82 @@ namespace Noodle.Api.Repositories
     {
         private readonly IMongoCollection<dynamic> _commoditiesCollection;
         private readonly IMongoCollection<dynamic> _youtubeCollection;
+        private readonly ILogger<CommoditiesRepository> _logger;
 
-
-        public CommoditiesRepository(IMongoClient client, IConfiguration config)
+        public CommoditiesRepository(IMongoClient client, IConfiguration config, ILogger<CommoditiesRepository> logger)
         {
+            _logger = logger;
+
             // ✅ Lấy database từ appsettings.json (giống StablecoinsRepository)
             var db = client.GetDatabase(config["DatabaseSettings:DatabaseName"]);
+            _logger.LogInformation("Using MongoDB database: {db}", db);
             _commoditiesCollection = db.GetCollection<dynamic>("commodities");
             _youtubeCollection = db.GetCollection<dynamic>("v4_youtube_videos");
         }
 
         public async Task<List<TopGrowthCommodity>> GetTopGrowthCommoditiesAsync()
         {
-            var validGroups = new[] { "metals", "energy", "agricultural" };
-
-            var filter = Builders<dynamic>.Filter.In("group", validGroups);
-            var docs = await _commoditiesCollection.Find(filter).ToListAsync();
-
-            var cleaned = new List<TopGrowthCommodity>();
-
-            foreach (var item in docs)
+            _logger.LogInformation("▶️ GetTopCommoditiesAsync started");
+            try
             {
-                try
+                var validGroups = new[] { "Metals", "Energy", "Agricultural" };
+
+                var filter = Builders<dynamic>.Filter.In("group", validGroups);
+                var docs = await _commoditiesCollection.Find(filter).ToListAsync();
+
+                var cleaned = new List<TopGrowthCommodity>();
+
+                foreach (var item in docs)
                 {
-                    var dict = item as IDictionary<string, object> ?? new Dictionary<string, object>();
-                    var weeklyStr = dict.GetValueOrDefault("weekly")?.ToString();
-                    if (string.IsNullOrWhiteSpace(weeklyStr)) continue;
-
-                    var growthRate = double.TryParse(
-                        weeklyStr.Replace("%", "").Trim(),
-                        out var parsed
-                    ) ? parsed : 0;
-
-                    cleaned.Add(new TopGrowthCommodity
+                    try
                     {
-                        Name = dict.GetValueOrDefault("name")?.ToString(),
-                        Group = dict.GetValueOrDefault("group")?.ToString(),
-                        Weekly = weeklyStr,
-                        GrowthRate = growthRate,
-                        Trend = dict.GetValueOrDefault("trend")?.ToString(),
-                        Symbol = dict.GetValueOrDefault("symbol")?.ToString(),
-                        NameSlug = dict.GetValueOrDefault("name_slug")?.ToString(),
-                        Exchange = dict.GetValueOrDefault("exchange")?.ToString(),
-                        MediumLogoUrl = dict.GetValueOrDefault("medium_logo_url")?.ToString()
-                    });
+                        var dict = item as IDictionary<string, object> ?? new Dictionary<string, object>();
+                        var weeklyStr = dict.GetValueOrDefault("weekly")?.ToString();
+                        if (string.IsNullOrWhiteSpace(weeklyStr)) continue;
+
+                        var growthRate = double.TryParse(
+                            weeklyStr.Replace("%", "").Trim(),
+                            out var parsed
+                        ) ? parsed : 0;
+
+                        cleaned.Add(new TopGrowthCommodity
+                        {
+                            Name = dict.GetValueOrDefault("name")?.ToString(),
+                            Group = dict.GetValueOrDefault("group")?.ToString(),
+                            Weekly = weeklyStr,
+                            GrowthRate = growthRate,
+                            Trend = dict.GetValueOrDefault("trend")?.ToString(),
+                            Symbol = dict.GetValueOrDefault("symbol")?.ToString(),
+                            NameSlug = dict.GetValueOrDefault("name_slug")?.ToString(),
+                            Exchange = dict.GetValueOrDefault("exchange")?.ToString(),
+                            MediumLogoUrl = dict.GetValueOrDefault("medium_logo_url")?.ToString()
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"[CommoditiesRepository] Skip invalid doc: {ex.Message}");
+                    }
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"[CommoditiesRepository] Skip invalid doc: {ex.Message}");
-                }
+                var result = cleaned
+                    .OrderByDescending(x => x.GrowthRate)
+                    .Take(5)
+                    .ToList();
+
+                _logger.LogInformation("Returning {Count} top growth commodities", result.Count);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "❌ Error in GetTopCommoditiesAsync");
+                throw;
             }
 
-            return cleaned
-                .OrderByDescending(x => x.GrowthRate)
-                .Take(5)
-                .ToList();
         }
 
         public async Task<List<dynamic>> GetTopCommoditiesAsync()
         {
-            var validGroups = new[] { "metals", "energy", "agricultural" };
+            var validGroups = new[] { "Metals", "Energy", "Agricultural" };
 
             var pipeline = new[]
             {
@@ -231,7 +247,7 @@ namespace Noodle.Api.Repositories
         }
         public async Task<List<CommodityGroupResult>> GetTopCommoditiesAsync(string? groupFilter = null)
         {
-            var validGroups = new[] { "metals", "energy", "agricultural" };
+            var validGroups = new[] { "Metals", "Energy", "Agricultural" };
             var result = new List<CommodityGroupResult>();
 
             // Nếu có filter thì không dùng group pipeline
