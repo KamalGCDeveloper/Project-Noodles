@@ -27,14 +27,10 @@ builder.Services.AddSingleton<IMongoClient>(s =>
 // 3️⃣ CORS đa môi trường
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowNextJs", policy =>
+    options.AddPolicy("AllowAll", policy =>
     {
-        var allowedOrigins = builder.Configuration
-            .GetSection("Cors:AllowedOrigins")
-            .Get<string[]>() ?? new string[] { };
-
         policy
-            .WithOrigins(allowedOrigins)
+            .SetIsOriginAllowed(_ => true) // allow ALL (localhost, IP, any port)
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
@@ -55,6 +51,7 @@ builder.Services.AddScoped<IPriceHistoryService, PriceHistoryService>();
 builder.Services.AddScoped<IPriceHistoryRepository, PriceHistoryRepository>();
 builder.Services.AddScoped<IComparisonService, ComparisonService>();
 builder.Services.AddScoped<IComparisonRepository, ComparisonRepository>();
+
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -65,7 +62,7 @@ var app = builder.Build();
 BestYieldHelper.StartAutoRefresh();
 
 // Enable CORS
-app.UseCors("AllowNextJs");
+app.UseCors("AllowAll");
 
 // Swagger only for Dev
 if (app.Environment.IsDevelopment())
