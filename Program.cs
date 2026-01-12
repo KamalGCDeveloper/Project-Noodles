@@ -65,12 +65,19 @@ BestYieldHelper.StartAutoRefresh();
 app.UseCors("AllowAll");
 
 // Swagger only for Dev
-app.UseSwagger();
-app.UseSwaggerUI(c =>
+var isRunningInDocker =
+    Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
+
+// Swagger chỉ chạy khi KHÔNG ở trong Docker
+if (!isRunningInDocker)
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Noodle API v1");
-    c.RoutePrefix = "swagger"; // ⚠️ BẮT BUỘC set rõ để tránh Regex null
-});
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Noodle API v1");
+        c.RoutePrefix = "swagger";
+    });
+}
 
 // Basic middleware
 app.UseHttpsRedirection();
