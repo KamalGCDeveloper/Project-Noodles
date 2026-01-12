@@ -65,11 +65,12 @@ BestYieldHelper.StartAutoRefresh();
 app.UseCors("AllowAll");
 
 // Swagger only for Dev
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Noodle API v1");
+    c.RoutePrefix = "swagger"; // ⚠️ BẮT BUỘC set rõ để tránh Regex null
+});
 
 // Basic middleware
 app.UseHttpsRedirection();
