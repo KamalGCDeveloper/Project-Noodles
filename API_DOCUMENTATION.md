@@ -1,575 +1,177 @@
-# Noodle API - Endpoint Documentation
+Noodle API endpoint documentation
+
+This document is a complete plain language reference for all available API endpoints.
+
+Base URL information
+All endpoints are prefixed with /noodle.
+Development base URL is http://localhost:5130/noodle.
+Production base URL is https://your-domain.com/noodle.
+
+Sections in this document
+Stablecoins
+Stocks
+Commodities
+Price history
+Response formats
+Error handling
+
+Stablecoins endpoints
+
+Get top growth stablecoins
+Endpoint GET /noodle/top-growth-stablecoins
+Purpose returns stablecoins with the highest growth rate.
+Typical response includes symbol growth and related fields.
+
+Get most talked about stablecoins
+Endpoint GET /noodle/most-talked-about-stablecoins
+Purpose returns stablecoins with the highest mention count.
+Typical response includes symbol mentions and related fields.
+
+Get number of tracked stablecoins
+Endpoint GET /noodle/stablecoins-number-tracked
+Purpose returns total number of stablecoins being tracked.
+Typical response includes count and related fields.
+
+Get active users for stablecoins
+Endpoint GET /noodle/active-users-stablecoins
+Purpose returns active users tracking stablecoins.
+Typical response includes activeUsers and related fields.
+
+Get stablecoins list
+Endpoint GET /noodle/stablecoins
+Purpose returns paginated stablecoins list with search support.
+Query parameters are q optional search text, page optional default 1, and limit optional default 20.
+Example request path is /noodle/stablecoins?q=USD&page=1&limit=20.
+Typical response includes a data array and pagination object with page limit and total.
+
+Stocks endpoints
+
+Get top growth stocks
+Endpoint GET /noodle/top-growth-stocks
+Purpose returns stocks with highest growth rate.
+Typical response includes symbol growth and related fields.
+
+Get most talked about stocks
+Endpoint GET /noodle/most-talked-about-stocks
+Purpose returns stocks with highest mention count.
+Typical response includes symbol mentions and related fields.
+
+Get number of tracked stocks
+Endpoint GET /noodle/stock-number-tracked
+Purpose returns total number of tracked stocks.
+Typical response includes count and related fields.
+
+Get active users for stocks
+Endpoint GET /noodle/active-users-stock
+Purpose returns active users tracking stocks.
+Typical response includes activeUsers7d and related fields.
+
+Get stocks list
+Endpoint GET /noodle/stocks
+Purpose returns paginated stock list with search and optional group filter.
+Query parameters are limit optional default 25, page optional default 1, search optional text, and groupFilter optional category.
+Example request path is /noodle/stocks?limit=25&page=1&search=Apple&groupFilter=tech.
+Typical response includes a data array and pagination with page limit and total.
+
+Commodities endpoints
+
+Get top growth commodities
+Endpoint GET /noodle/top-growth-commodities
+Purpose returns commodities with highest growth rate.
+Typical response includes name growth and related fields.
+
+Get most talked about commodities
+Endpoint GET /noodle/most-talked-about-commodities
+Purpose returns commodities with highest mention count.
+Typical response includes name mentions and related fields.
+
+Get number of tracked commodities
+Endpoint GET /noodle/commodities-number-tracked
+Purpose returns total tracked commodities.
+Typical response includes count and related fields.
+
+Get active users for commodities
+Endpoint GET /noodle/active-users-commodities
+Purpose returns active users tracking commodities.
+Typical response includes activeUsers7d and related fields.
+
+Get commodities list
+Endpoint GET /noodle/commodities
+Purpose returns paginated commodities list with optional group filter.
+Query parameters are limit optional default 10, page optional default 1, and groupFilter optional category.
+Example request path is /noodle/commodities?limit=10&page=1&groupFilter=metals.
+Typical response includes data array and pagination with page limit and total.
 
-Complete reference for all available API endpoints.
+Price history endpoint
 
-## Base URL
+Get price history
+Endpoint GET /noodle/price-history
+Purpose returns historical price points for an asset.
+Query parameters follow the PriceHistoryRequest model and usually include asset identifier, time range, and granularity fields.
+Example request path is /noodle/price-history?symbol=AAPL&from=2024-01-01&to=2024-12-31.
+Typical response includes data points with timestamp price and related fields.
 
-All endpoints are prefixed with `/noodle`
+Response formats
 
-**Development:** `http://localhost:5130/noodle`  
-**Production:** `https://your-domain.com/noodle`
+Success responses usually include data and optionally pagination.
+Pagination usually includes page limit and total.
 
-## Table of Contents
+Error responses usually include an error message and an error code.
 
-- [Stablecoins](#stablecoins)
-- [Stocks](#stocks)
-- [Commodities](#commodities)
-- [Price History](#price-history)
-- [Response Formats](#response-formats)
-- [Error Handling](#error-handling)
+Error handling
 
----
+Common status codes
+200 means request successful.
+400 means bad request or invalid parameters.
+404 means resource not found.
+500 means internal server error.
 
-## Stablecoins
+Rate limiting
+Rate limiting is not currently enforced and may be added in future versions.
 
-### Get Top Growth Stablecoins
+Authentication
+Authentication is not currently required.
 
-Returns the stablecoins with the highest growth rate.
+CORS
+CORS support is configurable.
+Typical development origins include http://localhost:3000 and http://localhost:3001.
+Production origins are configured by environment.
 
-**Endpoint:** `GET /noodle/top-growth-stablecoins`
+Testing with Swagger
+In development mode Swagger UI is available at http://localhost:5130/swagger.
+Swagger provides interactive endpoint testing, request and response examples, and schema definitions.
 
-**Response:**
-```json
-{
-  "data": [
-    {
-      "symbol": "USDT",
-      "growth": 12.5,
-      "...": "..."
-    }
-  ]
-}
-```
+Example usage
 
----
-
-### Get Most Talked About Stablecoins
-
-Returns the stablecoins with the most mentions/discussions.
-
-**Endpoint:** `GET /noodle/most-talked-about-stablecoins`
-
-**Response:**
-```json
-[
-  {
-    "symbol": "USDC",
-    "mentions": 1234,
-    "...": "..."
-  }
-]
-```
-
----
-
-### Get Number of Tracked Stablecoins
-
-Returns the total count of stablecoins being tracked.
-
-**Endpoint:** `GET /noodle/stablecoins-number-tracked`
-
-**Response:**
-```json
-{
-  "count": 50,
-  "...": "..."
-}
-```
-
----
-
-### Get Active Users for Stablecoins
-
-Returns the number of active users tracking stablecoins.
-
-**Endpoint:** `GET /noodle/active-users-stablecoins`
-
-**Response:**
-```json
-{
-  "activeUsers": 1234,
-  "...": "..."
-}
-```
-
----
-
-### Get Stablecoins List
-
-Returns a paginated list of stablecoins with search capability.
-
-**Endpoint:** `GET /noodle/stablecoins`
-
-**Query Parameters:**
-- `q` (string, optional): Search query
-- `page` (integer, optional, default: 1): Page number
-- `limit` (integer, optional, default: 20): Items per page
-
-**Example:**
-```
-GET /noodle/stablecoins?q=USD&page=1&limit=20
-```
-
-**Response:**
-```json
-{
-  "data": [
-    {
-      "id": "...",
-      "symbol": "USDT",
-      "name": "Tether",
-      "...": "..."
-    }
-  ],
-  "pagination": {
-    "page": 1,
-    "limit": 20,
-    "total": 50
-  }
-}
-```
-
----
-
-## Stocks
-
-### Get Top Growth Stocks
-
-Returns the stocks with the highest growth rate.
-
-**Endpoint:** `GET /noodle/top-growth-stocks`
-
-**Response:**
-```json
-{
-  "data": [
-    {
-      "symbol": "AAPL",
-      "growth": 8.5,
-      "...": "..."
-    }
-  ]
-}
-```
-
----
-
-### Get Most Talked About Stocks
-
-Returns the stocks with the most mentions/discussions.
-
-**Endpoint:** `GET /noodle/most-talked-about-stocks`
-
-**Response:**
-```json
-{
-  "data": [
-    {
-      "symbol": "TSLA",
-      "mentions": 5678,
-      "...": "..."
-    }
-  ]
-}
-```
-
----
-
-### Get Number of Tracked Stocks
-
-Returns the total count of stocks being tracked.
-
-**Endpoint:** `GET /noodle/stock-number-tracked`
-
-**Response:**
-```json
-{
-  "count": 150,
-  "...": "..."
-}
-```
-
----
-
-### Get Active Users for Stocks
-
-Returns the number of active users tracking stocks.
-
-**Endpoint:** `GET /noodle/active-users-stock`
-
-**Response:**
-```json
-{
-  "activeUsers7d": 2345,
-  "...": "..."
-}
-```
-
----
-
-### Get Stocks List
-
-Returns a paginated list of stocks with search and filter capabilities.
-
-**Endpoint:** `GET /noodle/stocks`
-
-**Query Parameters:**
-- `limit` (integer, optional, default: 25): Items per page
-- `page` (integer, optional, default: 1): Page number
-- `search` (string, optional): Search query
-- `groupFilter` (string, optional): Filter by group/category
-
-**Example:**
-```
-GET /noodle/stocks?limit=25&page=1&search=Apple&groupFilter=tech
-```
-
-**Response:**
-```json
-{
-  "data": [
-    {
-      "symbol": "AAPL",
-      "name": "Apple Inc.",
-      "healthRank": 95,
-      "...": "..."
-    }
-  ],
-  "pagination": {
-    "page": 1,
-    "limit": 25,
-    "total": 150
-  }
-}
-```
-
----
-
-## Commodities
-
-### Get Top Growth Commodities
-
-Returns the commodities with the highest growth rate.
-
-**Endpoint:** `GET /noodle/top-growth-commodities`
-
-**Response:**
-```json
-{
-  "data": [
-    {
-      "name": "Gold",
-      "growth": 5.2,
-      "...": "..."
-    }
-  ]
-}
-```
-
----
-
-### Get Most Talked About Commodities
-
-Returns the commodities with the most mentions/discussions.
-
-**Endpoint:** `GET /noodle/most-talked-about-commodities`
-
-**Response:**
-```json
-{
-  "data": [
-    {
-      "name": "Oil",
-      "mentions": 3456,
-      "...": "..."
-    }
-  ]
-}
-```
-
----
-
-### Get Number of Tracked Commodities
-
-Returns the total count of commodities being tracked.
-
-**Endpoint:** `GET /noodle/commodities-number-tracked`
-
-**Response:**
-```json
-{
-  "count": 30,
-  "...": "..."
-}
-```
-
----
-
-### Get Active Users for Commodities
-
-Returns the number of active users tracking commodities.
-
-**Endpoint:** `GET /noodle/active-users-commodities`
-
-**Response:**
-```json
-{
-  "activeUsers7d": 890,
-  "...": "..."
-}
-```
-
----
-
-### Get Commodities List
-
-Returns a paginated list of commodities with filter capabilities.
-
-**Endpoint:** `GET /noodle/commodities`
-
-**Query Parameters:**
-- `limit` (integer, optional, default: 10): Items per page
-- `page` (integer, optional, default: 1): Page number
-- `groupFilter` (string, optional): Filter by group/category
-
-**Example:**
-```
-GET /noodle/commodities?limit=10&page=1&groupFilter=metals
-```
-
-**Response:**
-```json
-{
-  "data": [
-    {
-      "name": "Gold",
-      "healthRank": 88,
-      "group": "metals",
-      "...": "..."
-    }
-  ],
-  "pagination": {
-    "page": 1,
-    "limit": 10,
-    "total": 30
-  }
-}
-```
-
----
-
-## Price History
-
-### Get Price History
-
-Returns historical price data for a specific asset.
-
-**Endpoint:** `GET /noodle/price-history`
-
-**Query Parameters:**
-The endpoint accepts a `PriceHistoryRequest` object with the following properties (check the model for exact fields):
-- Asset identifier parameters
-- Time range parameters
-- Granularity settings
-
-**Example:**
-```
-GET /noodle/price-history?symbol=AAPL&from=2024-01-01&to=2024-12-31
-```
-
-**Response:**
-```json
-{
-  "data": [
-    {
-      "timestamp": "2024-01-01T00:00:00Z",
-      "price": 185.50,
-      "...": "..."
-    }
-  ]
-}
-```
-
----
-
-## Response Formats
-
-### Success Response
-
-Most endpoints return data in this format:
-
-```json
-{
-  "data": [...],
-  "pagination": {
-    "page": 1,
-    "limit": 20,
-    "total": 100
-  }
-}
-```
-
-### Error Response
-
-Error responses follow this format:
-
-```json
-{
-  "error": {
-    "message": "Error description",
-    "code": "ERROR_CODE"
-  }
-}
-```
-
----
-
-## Error Handling
-
-### Common HTTP Status Codes
-
-- **200 OK**: Request successful
-- **400 Bad Request**: Invalid parameters or request format
-- **404 Not Found**: Resource not found
-- **500 Internal Server Error**: Server error occurred
-
-### Error Response Example
-
-```json
-{
-  "error": {
-    "message": "Invalid page number",
-    "code": "INVALID_PARAMETER"
-  }
-}
-```
-
----
-
-## Rate Limiting
-
-_(To be implemented)_
-
-Currently, there are no rate limits enforced. This may change in future versions.
-
----
-
-## Authentication
-
-_(Currently not required)_
-
-The API currently does not require authentication. If authentication is added in the future, this section will be updated.
-
----
-
-## CORS
-
-The API supports CORS for the following origins (configurable in `appsettings.json`):
-- Development: `http://localhost:3000`, `http://localhost:3001`
-- Production: Configured allowed origins
-
----
-
-## Testing with Swagger
-
-When running in **Development** mode, you can test all endpoints interactively using Swagger UI:
-
-```
-http://localhost:5130/swagger
-```
-
-Swagger provides:
-- Interactive API documentation
-- Request/response examples
-- Ability to test endpoints directly from the browser
-- Schema definitions for all models
-
----
-
-## Example Usage
-
-### Using cURL
-
-```bash
-# Get top growth stablecoins
+Example curl commands
 curl http://localhost:5130/noodle/top-growth-stablecoins
-
-# Search stablecoins
 curl "http://localhost:5130/noodle/stablecoins?q=USD&page=1&limit=10"
-
-# Get stocks with filters
 curl "http://localhost:5130/noodle/stocks?limit=25&search=Apple"
-```
 
-### Using JavaScript (Fetch API)
+Example JavaScript fetch flow
+Call the endpoint URL.
+Parse JSON response.
+Handle errors in catch block.
 
-```javascript
-// Get top growth stablecoins
-fetch('http://localhost:5130/noodle/top-growth-stablecoins')
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error('Error:', error));
+Example Python requests flow
+Send GET request.
+Parse JSON response.
+Use query parameters when needed.
 
-// Search stablecoins with pagination
-const params = new URLSearchParams({
-  q: 'USD',
-  page: 1,
-  limit: 20
-});
+Changelog
 
-fetch(`http://localhost:5130/noodle/stablecoins?${params}`)
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error('Error:', error));
-```
+Version 1.0.0 current
+Initial API release.
+Stablecoins endpoints added.
+Stocks endpoints added.
+Commodities endpoints added.
+Price history endpoint added.
 
-### Using Python (requests)
+Support
+For issues review README and GETTING_STARTED documents, open a repository issue, or contact the development team.
 
-```python
-import requests
-
-# Get top growth stablecoins
-response = requests.get('http://localhost:5130/noodle/top-growth-stablecoins')
-data = response.json()
-print(data)
-
-# Search stablecoins with pagination
-params = {
-    'q': 'USD',
-    'page': 1,
-    'limit': 20
-}
-response = requests.get('http://localhost:5130/noodle/stablecoins', params=params)
-data = response.json()
-print(data)
-```
-
----
-
-## Changelog
-
-### Version 1.0.0 (Current)
-- Initial API release
-- Stablecoins endpoints
-- Stocks endpoints
-- Commodities endpoints
-- Price history endpoints
-
----
-
-## Support
-
-For questions or issues:
-- Check the [README.md](README.md) for general documentation
-- Review the [GETTING_STARTED.md](GETTING_STARTED.md) for quick setup
-- Create an issue in the GitLab repository
-- Contact the development team
-
----
-
-## Additional Resources
-
-- **Swagger UI** (Development only): `http://localhost:5130/swagger`
-- **Main Documentation**: [README.md](README.md)
-- **Quick Start Guide**: [GETTING_STARTED.md](GETTING_STARTED.md)
+Additional resources
+Swagger UI development URL is http://localhost:5130/swagger.
+Main documentation is in README.md.
+Quick start guide is in GETTING_STARTED.md.
 
